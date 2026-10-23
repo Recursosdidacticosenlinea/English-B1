@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CAA English B1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: a study-planner page. Header with progress and the 5-step route, then 10 modules (5 units each) built on the CEFR B1 descriptors. */
+:root{
+  --bg:#f3f5fa; --surface:#ffffff; --ink:#14213d; --muted:#56607a; --line:#d9deea;
+  --accent:#1f4fd1; --accent-soft:#e3eafc; --gold:#f2b705; --gold-ink:#5c4300;
+  --new:#0f7a5a; --new-soft:#dcf3ea; --soon:#8a5a00; --soon-soft:#fbefd2;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1424; --surface:#161e33; --ink:#e8ecf6; --muted:#9aa5c0; --line:#2a3552;
+  --accent:#8eabff; --accent-soft:#1f2c52; --gold:#f2c23a; --gold-ink:#f2c23a;
+  --new:#5fd3a9; --new-soft:#123a2e; --soon:#f0c062; --soon-soft:#3a2d10; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1424; --surface:#161e33; --ink:#e8ecf6; --muted:#9aa5c0; --line:#2a3552;
+  --accent:#8eabff; --accent-soft:#1f2c52; --gold:#f2c23a; --gold-ink:#f2c23a;
+  --new:#5fd3a9; --new-soft:#123a2e; --soon:#f0c062; --soon-soft:#3a2d10; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding-block:32px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2rem,5vw,3.1rem);line-height:1.05;margin:.35em 0 .3em;text-wrap:balance}
+h1 span{background:linear-gradient(transparent 62%,var(--gold) 62%,var(--gold) 90%,transparent 90%);padding:0 .08em}
+.lead{max-width:62ch;color:var(--muted);font-size:1.08rem;margin:0}
+h2{font-family:var(--display);font-weight:700;font-size:1.45rem;margin:0;text-wrap:balance}
+/* Progress */
+.progress{margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.bar{flex:1 1 240px;max-width:420px;height:12px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--new);border-radius:99px;transition:width .4s ease}
+.progress b{font-variant-numeric:tabular-nums}
+/* Route */
+.route{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.route ol{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;counter-reset:s}
+.route li{counter-increment:s;position:relative;padding:12px;border-radius:10px;background:var(--bg);min-width:0}
+.route li::before{content:counter(s);font-family:var(--display);font-weight:800;font-size:1.3rem;color:var(--accent);display:block;line-height:1}
+.route b{display:block;margin-top:6px}
+.route small{color:var(--muted);font-size:.86rem;display:block}
+.skills{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.skills i{font-style:normal;font-size:.74rem;padding:1px 7px;border-radius:99px;background:var(--accent-soft);color:var(--accent);font-weight:700}
+.evidence{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.evidence div{border:1px dashed var(--line);border-radius:10px;padding:10px 12px;font-size:.9rem;color:var(--muted)}
+.evidence strong{color:var(--ink)}
+/* Controls */
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:40px 0 18px}
+.controls label{font-weight:700;font-size:.9rem}
+#q{flex:1 1 220px;min-width:0;font:inherit;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:.88rem;font-weight:700;padding:7px 13px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+/* Modules & cards */
+.group{margin-top:36px}
+.group-head{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:baseline;margin-bottom:14px}
+.mod-num{grid-row:span 2;font-family:var(--display);font-weight:800;font-size:2.4rem;line-height:1;color:var(--accent)}
+.group-head .count{color:var(--muted);font-size:.9rem;margin-left:8px;font-weight:400;font-family:var(--body)}
+.cando{margin:0;color:var(--muted);font-size:.93rem;max-width:75ch}
+.cando em{font-style:normal;font-weight:700;color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.lvl{font-family:var(--display);font-weight:800;font-size:.82rem;padding:3px 9px;border-radius:6px;background:var(--gold);color:#2b2000;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.status{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:2px 8px;border-radius:99px}
+.st-progress{background:var(--new-soft);color:var(--new)}
+.card h3{font-family:var(--display);font-weight:700;font-size:1.2rem;line-height:1.2;margin:4px 0 0;text-wrap:balance}
+.focus{color:var(--muted);font-size:.93rem;margin:0}
+.card .go{margin-top:auto;padding-top:8px}
+.card a.btn{display:inline-block;font-weight:700;text-decoration:none;color:var(--surface);background:var(--accent);padding:8px 14px;border-radius:9px}
+.card a.btn:hover{filter:brightness(1.08)}
+.empty{color:var(--muted);padding:20px;border:1px dashed var(--line);border-radius:12px;text-align:center}
+footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
+@media (max-width:760px){.route ol{grid-template-columns:repeat(2,minmax(0,1fr))}.route li:last-child{grid-column:1/-1}.evidence{grid-template-columns:1fr}.mod-num{font-size:1.9rem}}
+@media (prefers-reduced-motion:no-preference){.card{transition:transform .15s ease,border-color .15s}.card:hover{transform:translateY(-2px);border-color:var(--accent)}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">CAA Virtual · BUAP · English B1 · CEFR</div>
+    <h1>English B1: <span>50 units</span> to become independent</h1>
+    <p class="lead">Ten modules based on the Common European Framework of Reference (CEFR) for level B1, the level of the independent user. Go in order or choose any unit. Every unit takes about 60 minutes and you can come back any time.</p>
+    <div class="progress" aria-live="polite">
+      <div class="bar" role="progressbar" aria-label="Units completed" aria-valuemin="0" aria-valuemax="50" id="bar"><i></i></div>
+      <span><b id="done-count">0</b> of 50 units completed</span>
+    </div>
+  </header>
+
+  <section class="route" aria-labelledby="route-h">
+    <h2 id="route-h">How every unit works</h2>
+    <ol>
+      <li><b>Presentation</b><small>Meet the topic in a real situation.</small></li>
+      <li><b>Objectives</b><small>See what you will be able to do.</small></li>
+      <li><b>Explanation</b><small>Vocabulary, grammar and examples.</small></li>
+      <li><b>Practice</b><small>Four skills:</small><span class="skills"><i>Listening</i><i>Reading</i><i>Writing</i><i>Speaking</i></span></li>
+      <li><b>Self-assessment</b><small>Rate six "I can…" statements from 1 to 5.</small></li>
+    </ol>
+    <div class="evidence">
+      <div><strong>Writing evidence:</strong> write and submit your text directly in the unit.</div>
+      <div><strong>Speaking:</strong> repeat sentences and get a pronunciation score, then record your task for your course platform.</div>
+    </div>
+  </section>
+
+  <div class="controls">
+    <label for="q">Find a unit</label>
+    <input id="q" type="search" placeholder="Try “passive”, “conditional” or “travel”" autocomplete="off">
+    <div class="chips" role="group" aria-label="Filter by module" id="mods"></div>
+  </div>
+
+  <main id="list"></main>
+
+  <footer>CAA Virtual · BUAP · Level B1 (CEFR) · Your progress is saved on this device only.</footer>
+</div>
+
+<script>
+/* ===== Units on the home page =====
+   To add a unit: copy the _template folder, rename it (e.g. "my-new-unit"),
+   edit its data.js (slug, number), then add one line here with url: "my-new-unit/" and its module (mod). */
+const UNITS = [
+  {n:1, mod:1, title:"First Impressions", focus:"Personality adjectives; stative vs. dynamic verbs", url:"first-impressions/"},
+  {n:2, mod:1, title:"Small Talk", focus:"Question tags; so do I / neither do I", url:"small-talk/"},
+  {n:3, mod:1, title:"How Do You Feel?", focus:"-ed / -ing adjectives; adjective + preposition", url:"how-do-you-feel/"},
+  {n:4, mod:1, title:"Getting Along", focus:"Phrasal verbs for relationships", url:"getting-along/"},
+  {n:5, mod:1, title:"Then and Now", focus:"Used to and would for past habits", url:"then-and-now/"},
+  {n:6, mod:2, title:"It Had Already Started", focus:"Past perfect", url:"it-had-already-started/"},
+  {n:7, mod:2, title:"A Night to Remember", focus:"Narrative tenses: past simple, continuous and perfect", url:"a-night-to-remember/"},
+  {n:8, mod:2, title:"I've Been Waiting for Ages!", focus:"Present perfect continuous", url:"ive-been-waiting/"},
+  {n:9, mod:2, title:"Urban Legends", focus:"Time linkers: as soon as, by the time, until, in the end", url:"urban-legends/"},
+  {n:10, mod:2, title:"Book Club", focus:"Book reviews; although, however, despite", url:"book-club/"},
+  {n:11, mod:3, title:"Dream Jobs", focus:"Gerunds and infinitives", url:"dream-jobs/"},
+  {n:12, mod:3, title:"The Cover Letter", focus:"Formal emails and letters; formal register", url:"the-cover-letter/"},
+  {n:13, mod:3, title:"Tell Me About Yourself", focus:"Indirect questions", url:"tell-me-about-yourself/"},
+  {n:14, mod:3, title:"Working From Home", focus:"Be used to / get used to", url:"working-from-home/"},
+  {n:15, mod:3, title:"Study Smarter", focus:"Past obligation: had to, didn't have to, was allowed to", url:"study-smarter/"},
+  {n:16, mod:4, title:"Travel Nightmares", focus:"So / such … that", url:"travel-nightmares/"},
+  {n:17, mod:4, title:"Culture Shock", focus:"Be supposed to, be allowed to, it's polite to", url:"culture-shock/"},
+  {n:18, mod:4, title:"Where to Stay", focus:"Much / far / a bit + comparative; the more…, the more…", url:"where-to-stay/"},
+  {n:19, mod:4, title:"Festivals Around the World", focus:"The passive: present and past simple", url:"festivals-around-the-world/"},
+  {n:20, mod:4, title:"A Place I Love", focus:"Relative clauses: defining and non-defining", url:"a-place-i-love/"},
+  {n:21, mod:5, title:"Healthy Habits", focus:"Quantifiers: few, a few, little, a little, plenty of", url:"healthy-habits/"},
+  {n:22, mod:5, title:"If I Were You", focus:"Advice: had better, ought to, if I were you", url:"if-i-were-you/"},
+  {n:23, mod:5, title:"It Must Be Stress", focus:"Modals of deduction: must, might, can't", url:"it-must-be-stress/"},
+  {n:24, mod:5, title:"A Good Night's Sleep", focus:"Purpose: to, in order to, so that", url:"a-good-nights-sleep/"},
+  {n:25, mod:5, title:"Mind Over Matter", focus:"Cause and result: because of, due to, as a result", url:"mind-over-matter/"},
+  {n:26, mod:6, title:"If I Won the Lottery", focus:"Second conditional", url:"if-i-won-the-lottery/"},
+  {n:27, mod:6, title:"I Wish…", focus:"Wish + past simple; if only", url:"i-wish/"},
+  {n:28, mod:6, title:"Second Chances", focus:"Third conditional", url:"second-chances/"},
+  {n:29, mod:6, title:"I Should Have Known", focus:"Should have / shouldn't have for regrets", url:"i-should-have-known/"},
+  {n:30, mod:6, title:"This Time Next Year", focus:"Future continuous and future perfect", url:"this-time-next-year/"},
+  {n:31, mod:7, title:"She Said That…", focus:"Reported speech: statements", url:"she-said-that/"},
+  {n:32, mod:7, title:"He Asked Me…", focus:"Reported questions", url:"he-asked-me/"},
+  {n:33, mod:7, title:"Fake News", focus:"Reporting verbs: tell, ask, warn, advise + infinitive", url:"fake-news/"},
+  {n:34, mod:7, title:"Breaking News", focus:"The passive: present perfect, future and modals", url:"breaking-news/"},
+  {n:35, mod:7, title:"Online Life", focus:"Word formation: -ness, -ment, -ful, -less, -tion", url:"online-life/"},
+  {n:36, mod:8, title:"A Greener City", focus:"Making suggestions: how about, why don't we, I suggest", url:"a-greener-city/"},
+  {n:37, mod:8, title:"Agree or Disagree?", focus:"Giving opinions, agreeing and disagreeing", url:"agree-or-disagree/"},
+  {n:38, mod:8, title:"Making a Difference", focus:"Articles: a / an, the, no article", url:"making-a-difference/"},
+  {n:39, mod:8, title:"Would You Rather…?", focus:"Preferences: would rather, prefer, I'd prefer", url:"would-you-rather/"},
+  {n:40, mod:8, title:"Crime Doesn't Pay", focus:"Past deduction: must have, might have, can't have", url:"crime-doesnt-pay/"},
+  {n:41, mod:9, title:"Tech Help", focus:"Phrasal verbs for technology", url:"tech-help/"},
+  {n:42, mod:9, title:"Getting Things Done", focus:"Have / get something done", url:"getting-things-done/"},
+  {n:43, mod:9, title:"Smart Homes", focus:"Future time clauses: when, as soon as, until + present", url:"smart-homes/"},
+  {n:44, mod:9, title:"Complaints Department", focus:"Polite complaints and requests: Would you mind…?", url:"complaints-department/"},
+  {n:45, mod:9, title:"Artificial Intelligence", focus:"Predictions: will, may, could; be likely to", url:"artificial-intelligence/"},
+  {n:46, mod:10, title:"Big Decisions", focus:"Future forms review: will, going to, present continuous", url:"big-decisions/"},
+  {n:47, mod:10, title:"Giving a Presentation", focus:"Signposting language for talks", url:"giving-a-presentation/"},
+  {n:48, mod:10, title:"Persuade Me!", focus:"Persuasive language and negative questions", url:"persuade-me/"},
+  {n:49, mod:10, title:"Global Citizens", focus:"Conditionals review: zero, first, second, third", url:"global-citizens/"},
+  {n:50, mod:10, title:"My B1 Journey", focus:"B1 review and final project", url:"my-b1-journey/"}
+];
+
+/* Modules with a CEFR B1 can-do statement each. */
+const MODULES = [
+  {mod:1, name:"People and Relationships", cando:"I can describe people, feelings and relationships and keep a conversation going on familiar topics."},
+  {mod:2, name:"Stories and Experiences", cando:"I can narrate a story, relate the plot of a book or film and describe my reactions."},
+  {mod:3, name:"Work and Study", cando:"I can talk about my studies and work, write a formal email and handle a job interview."},
+  {mod:4, name:"Travel and Culture", cando:"I can deal with most situations while traveling and describe places, customs and traditions."},
+  {mod:5, name:"Health and Well-being", cando:"I can describe health problems in detail, give reasons and explain causes and results."},
+  {mod:6, name:"Hopes, Dreams and Regrets", cando:"I can talk about dreams, hopes and ambitions, imagine situations and express regret."},
+  {mod:7, name:"Media and Communication", cando:"I can understand the main points of news and report what other people said."},
+  {mod:8, name:"Society and the World", cando:"I can discuss social and environmental issues and give and support my opinion."},
+  {mod:9, name:"Science and Technology", cando:"I can describe how things work, solve everyday problems and make predictions."},
+  {mod:10, name:"Looking Ahead", cando:"I can explain decisions and plans and give a prepared presentation on a familiar topic."}
+];
+let mod = 0; /* 0 = all */
+
+const chipsEl = document.getElementById("mods");
+[{mod:0}].concat(MODULES).forEach(m=>{
+  const b=document.createElement("button");
+  b.className="chip"; b.type="button"; b.id="mod-"+m.mod;
+  b.textContent = m.mod ? "Module " + m.mod : "All";
+  if (m.mod) b.title = m.name;
+  b.setAttribute("aria-pressed", m.mod===mod ? "true":"false");
+  b.addEventListener("click",()=>{mod=m.mod;[...chipsEl.children].forEach(c=>c.setAttribute("aria-pressed",c===b?"true":"false"));render();});
+  chipsEl.appendChild(b);
+});
+document.getElementById("q").addEventListener("input",render);
+
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function done(u){ try { const s=JSON.parse(localStorage.getItem("b1:"+u.url.replace(/\/$/,""))||"{}"); return s.self && Object.keys(s.self).length>=6; } catch(e){ return false; } }
+
+function progress(){
+  const n = UNITS.filter(done).length;
+  document.getElementById("done-count").textContent = n;
+  const bar = document.getElementById("bar");
+  bar.setAttribute("aria-valuenow", n);
+  bar.firstElementChild.style.width = (n / UNITS.length * 100) + "%";
+}
+
+function render(){
+  const q=document.getElementById("q").value.trim().toLowerCase();
+  const list=document.getElementById("list"); list.innerHTML="";
+  let shown=0;
+  MODULES.forEach(g=>{
+    const items=UNITS.filter(u=>u.mod===g.mod
+      && (!mod || u.mod===mod)
+      && (!q || (u.title+" "+u.focus+" "+g.name).toLowerCase().includes(q)));
+    if(!items.length) return;
+    shown+=items.length;
+    const sec=document.createElement("section"); sec.className="group"; sec.id="module-"+g.mod;
+    sec.innerHTML=`<div class="group-head"><span class="mod-num" aria-hidden="true">${g.mod}</span>
+      <h2>Module ${g.mod} · ${esc(g.name)}<span class="count">${items.length} unit${items.length>1?"s":""}</span></h2>
+      <p class="cando"><em>CEFR B1:</em> ${esc(g.cando)}</p></div>`;
+    const grid=document.createElement("div"); grid.className="grid";
+    items.forEach(u=>{
+      const badge = done(u) ? `<span class="status st-progress">Completed</span>` : "";
+      grid.insertAdjacentHTML("beforeend",
+        `<article class="card"><div class="top"><span class="lvl">Unit ${u.n}</span>${badge}</div>
+         <h3>${esc(u.title)}</h3><p class="focus">${esc(u.focus)}</p><div class="go"><a class="btn" href="${esc(u.url)}">Start unit →</a></div></article>`);
+    });
+    sec.appendChild(grid); list.appendChild(sec);
+  });
+  if(!shown) list.innerHTML=`<p class="empty">No units match. Try another word or choose “All”.</p>`;
+}
+progress();
+render();
+</script>
+</body>
+</html>
